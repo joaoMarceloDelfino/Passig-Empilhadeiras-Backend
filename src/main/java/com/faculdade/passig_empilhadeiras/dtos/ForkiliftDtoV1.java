@@ -1,49 +1,41 @@
-package com.faculdade.passig_empilhadeiras.models;
+package com.faculdade.passig_empilhadeiras.dtos;
 
 import com.faculdade.passig_empilhadeiras.enums.ForkliftStatus;
-import jakarta.persistence.*;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
-@Entity
-public class Forklift {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+public class ForkiliftDtoV1 {
+
     private Integer id;
 
     @Size(max = 50)
     @NotNull
-    @Column(name = "name", nullable = false, length = 50)
     private String name;
 
     @Size(max = 50)
     @NotNull
-    @Column(name = "model", nullable = false, length = 50)
     private String model;
 
     @Size(max = 50)
     @NotNull
-    @Column(name = "manufacturer", nullable = false, length = 50)
     private String manufacturer;
 
     @NotNull
-    @Column(name = "weigth_capacity_kg", nullable = false)
     private Float weigthCapacityKg;
 
     @NotNull
-    @Column(name = "fabrication_year", nullable = false)
     private Integer fabricationYear;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false, length = 2)
     private ForkliftStatus status;
 
-    @Column(name = "aquisition_date")
     private LocalDate aquisitionDate;
+
 
     public LocalDate getAquisitionDate() {
         return aquisitionDate;
@@ -108,4 +100,5 @@ public class Forklift {
     public void setId(Integer id) {
         this.id = id;
     }
+
 }
