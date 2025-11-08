@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class ForkiliftDtoV1 {
 
@@ -35,6 +36,8 @@ public class ForkiliftDtoV1 {
     private ForkliftStatus status;
 
     private LocalDate aquisitionDate;
+
+    List<ForkliftImageDTOV1> base64Images;
 
 
     public LocalDate getAquisitionDate() {
@@ -108,4 +111,11 @@ public class ForkiliftDtoV1 {
         return this;
     }
 
+    public List<ForkliftImageDTOV1> getBase64Images() {
+        return base64Images;
+    }
+
+    public void setBase64Images(List<ForkliftImageDTOV1> base64Images) {
+        this.base64Images = base64Images;
+    }
 }

@@ -36,7 +36,7 @@ public class ForkliftController {
     }
 
     @PostMapping(value = "/save")
-    public Boolean save(@RequestParam MultipartFile file,
+    public Boolean save(@RequestParam List<MultipartFile> file,
                         @RequestParam String name,
                         @RequestParam String model,
                         @RequestParam String manufacturer,

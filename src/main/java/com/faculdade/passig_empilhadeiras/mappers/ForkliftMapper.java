@@ -2,10 +2,15 @@ package com.faculdade.passig_empilhadeiras.mappers;
 
 import com.faculdade.passig_empilhadeiras.dtos.ForkiliftDtoV1;
 import com.faculdade.passig_empilhadeiras.models.Forklift;
+import com.faculdade.passig_empilhadeiras.services.FileService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ForkliftMapper {
+
+    @Autowired
+    FileService fileService;
 
     public ForkiliftDtoV1 convertToDto(Forklift model) {
         ForkiliftDtoV1 dto = new ForkiliftDtoV1();

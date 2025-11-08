@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class Forklift {
@@ -44,6 +45,9 @@ public class Forklift {
 
     @Column(name = "aquisition_date")
     private LocalDate aquisitionDate;
+
+    @OneToMany(mappedBy = "forklift", fetch = FetchType.LAZY)
+    private List<ForkliftImage> forkliftImages;
 
     public LocalDate getAquisitionDate() {
         return aquisitionDate;
@@ -107,5 +111,13 @@ public class Forklift {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public List<ForkliftImage> getForkliftImages() {
+        return forkliftImages;
+    }
+
+    public void setForkliftImages(List<ForkliftImage> forkliftImages) {
+        this.forkliftImages = forkliftImages;
     }
 }
