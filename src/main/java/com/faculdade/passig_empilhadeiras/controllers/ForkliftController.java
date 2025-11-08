@@ -1,14 +1,16 @@
 package com.faculdade.passig_empilhadeiras.controllers;
 
 import com.faculdade.passig_empilhadeiras.dtos.ForkiliftDtoV1;
+import com.faculdade.passig_empilhadeiras.enums.ForkliftStatus;
 import com.faculdade.passig_empilhadeiras.services.ForkliftService;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -34,9 +36,16 @@ public class ForkliftController {
     }
 
     @PostMapping(value = "/save")
-    public Boolean save(@RequestBody @Valid ForkiliftDtoV1 dto){
+    public Boolean save(@RequestParam MultipartFile file,
+                        @RequestParam String name,
+                        @RequestParam String model,
+                        @RequestParam String manufacturer,
+                        @RequestParam Float weigthCapacityKg,
+                        @RequestParam Integer fabricationYear,
+                        @RequestParam ForkliftStatus status,
+                        @RequestParam LocalDate aquisitionDate){
         logger.info("Start save");
-        Boolean retorno = forkliftService.save(dto);
+        Boolean retorno = forkliftService.save(name, model, manufacturer, weigthCapacityKg, fabricationYear, status, aquisitionDate, file);
         logger.info("End save");
         return retorno;
     }

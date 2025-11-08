@@ -49,56 +49,63 @@ public class ForkiliftDtoV1 {
         return status;
     }
 
-    public void setStatus(ForkliftStatus status) {
+    public ForkiliftDtoV1 setStatus(ForkliftStatus status) {
         this.status = status;
+        return this;
     }
 
     public Integer getFabricationYear() {
         return fabricationYear;
     }
 
-    public void setFabricationYear(Integer fabricationYear) {
+    public ForkiliftDtoV1 setFabricationYear(Integer fabricationYear) {
         this.fabricationYear = fabricationYear;
+        return this;
     }
 
     public Float getWeigthCapacityKg() {
         return weigthCapacityKg;
     }
 
-    public void setWeigthCapacityKg(Float weigthCapacityKg) {
+    public ForkiliftDtoV1 setWeigthCapacityKg(Float weigthCapacityKg) {
         this.weigthCapacityKg = weigthCapacityKg;
+        return this;
     }
 
     public String getManufacturer() {
         return manufacturer;
     }
 
-    public void setManufacturer(String manufacturer) {
+    public ForkiliftDtoV1 setManufacturer(String manufacturer) {
         this.manufacturer = manufacturer;
+        return this;
     }
 
     public String getModel() {
         return model;
     }
 
-    public void setModel(String model) {
+    public ForkiliftDtoV1 setModel(String model) {
         this.model = model;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public ForkiliftDtoV1 setName(String name) {
         this.name = name;
+        return this;
     }
 
     public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public ForkiliftDtoV1 setId(Integer id) {
         this.id = id;
+        return this;
     }
 
 }
