@@ -10,11 +10,16 @@ import java.util.List;
 public class ForkliftImageService {
     @Autowired
     private ForkliftImageRepository forkliftImageRepository;
+
     public void save(ForkliftImage forkliftImage) {
         forkliftImageRepository.save(forkliftImage);
     }
 
-    public List<ForkliftImage>findAllByForkliftId(Integer forkliftId){
+    public List<ForkliftImage> findAllByForkliftId(Integer forkliftId) {
         return forkliftImageRepository.findAllByForkliftId(forkliftId);
+    }
+
+    public void deleteAllByForkliftId(Integer forkliftId) {
+        forkliftImageRepository.deleteAllByForkliftId(forkliftId);
     }
 }

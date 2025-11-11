@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface ForkliftImageRepository extends JpaRepository<ForkliftImage, Integer> {
     List<ForkliftImage> findAllByForkliftId(Integer forkliftId);
+
+    void deleteAllByForkliftId(Integer forkliftId);
 }
