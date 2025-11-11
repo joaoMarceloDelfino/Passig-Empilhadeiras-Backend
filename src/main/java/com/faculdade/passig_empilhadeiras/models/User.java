@@ -1,6 +1,7 @@
 package com.faculdade.passig_empilhadeiras.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.ColumnDefault;
@@ -31,14 +32,19 @@ public class User {
     @Column(name = "password_hash", nullable = false, length = 72)
     private String passwordHash;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_role", nullable = false)
-    private Role role;
+//    @NotNull
+//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+//    @JoinColumn(name = "id_role", nullable = false)
+//    private Role role;
 
     @ColumnDefault("now()")
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
+
+    @Email
+    @NotNull
+    @Column(name = "email")
+    private String email;
 
     public OffsetDateTime getCreatedAt() {
         return createdAt;
@@ -48,13 +54,13 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
+//    public Role getRole() {
+//        return role;
+//    }
+//
+//    public void setRole(Role role) {
+//        this.role = role;
+//    }
 
     public String getPasswordHash() {
         return passwordHash;
@@ -86,5 +92,13 @@ public class User {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

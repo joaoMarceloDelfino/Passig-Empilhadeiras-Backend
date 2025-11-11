@@ -1,6 +1,7 @@
-package com.faculdade.passig_empilhadeiras.repositories;
+package com.faculdade.passig_empilhadeiras.services;
 
 import com.faculdade.passig_empilhadeiras.models.ForkliftImage;
+import com.faculdade.passig_empilhadeiras.repositories.ForkliftImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

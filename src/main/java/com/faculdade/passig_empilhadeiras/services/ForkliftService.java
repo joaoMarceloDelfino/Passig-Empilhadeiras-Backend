@@ -6,7 +6,6 @@ import com.faculdade.passig_empilhadeiras.enums.ForkliftStatus;
 import com.faculdade.passig_empilhadeiras.mappers.ForkliftMapper;
 import com.faculdade.passig_empilhadeiras.models.Forklift;
 import com.faculdade.passig_empilhadeiras.models.ForkliftImage;
-import com.faculdade.passig_empilhadeiras.repositories.ForkliftImageService;
 import com.faculdade.passig_empilhadeiras.repositories.ForkliftRepository;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
