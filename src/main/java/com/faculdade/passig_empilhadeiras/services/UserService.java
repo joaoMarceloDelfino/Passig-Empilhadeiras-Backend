@@ -8,6 +8,7 @@ import com.faculdade.passig_empilhadeiras.models.User;
 import com.faculdade.passig_empilhadeiras.repositories.UserRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -53,11 +54,15 @@ public class UserService {
         return token;
     }
 
-
+    @Transactional
     public Boolean register(AuthDTOV1 authDTOV1) {
 
         if(userRepository.existsByEmail(authDTOV1.getEmail())) {
             throw new RuntimeException("Usuario com este nome já existe!");
+        }
+
+        if(!authDTOV1.getPassword().equals(authDTOV1.getPasswordConfirmation())){
+            throw new RuntimeException("Senha deve ser igual a confirmação de senha");
         }
 
         User user = new User();
@@ -69,6 +74,10 @@ public class UserService {
         userRepository.saveAndFlush(user);
 
         return true;
+    }
+
+    public Boolean existsByEmail(String email){
+        return userRepository.existsByEmail(email);
     }
 
 }
