@@ -11,7 +11,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
 
-
 @Component
 public class FileService {
 
@@ -32,7 +31,8 @@ public class FileService {
             Path filePath = uploadDir.resolve(originalFilename).normalize();
             file.transferTo(filePath.toFile());
 
-            Path relativePath = Paths.get("uploads").resolve(subDir != null ? subDir : "").resolve(originalFilename).normalize();
+            Path relativePath = Paths.get("uploads").resolve(subDir != null ? subDir : "").resolve(originalFilename)
+                    .normalize();
             return relativePath.toString().replace(File.separatorChar, '/');
         } catch (IOException e) {
             e.printStackTrace();
@@ -40,20 +40,30 @@ public class FileService {
         }
     }
 
-    public String encodeToBase64(String fileDir){
+    public String encodeToBase64(String fileDir) {
 
-        try{
+        try {
             Path filePath = Paths.get(System.getProperty("user.dir"), fileDir);
 
             byte[] fileBytes = Files.readAllBytes(filePath);
 
             return Base64.getEncoder().encodeToString(fileBytes);
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         return null;
     }
-}
 
+    public void deleteFile(String fileDir) {
+        try {
+            Path filePath = Paths.get(System.getProperty("user.dir"), fileDir);
+            File file = filePath.toFile();
+            if (file.exists()) {
+                file.delete();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
