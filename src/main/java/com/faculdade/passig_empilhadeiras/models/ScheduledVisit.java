@@ -19,14 +19,18 @@ public class ScheduledVisit {
     @JoinColumn(name = "id_user", nullable = false)
     private User idUser;
 
-    @Size(max = 50)
     @NotNull
     @Column(name = "type", nullable = false, length = 50)
+    @Enumerated(EnumType.STRING)
     private VisitType type;
 
     @NotNull
-    @Column(name = "scheduled_time", nullable = false)
-    private OffsetDateTime scheduledTime;
+    @Column(name = "initial_scheduled_time", nullable = false)
+    private OffsetDateTime initialScheduledTime;
+
+    @NotNull
+    @Column(name = "end_scheduled_time", nullable = false)
+    private OffsetDateTime endScheduledTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_forklift")
@@ -36,51 +40,87 @@ public class ScheduledVisit {
     @Column(name = "is_completed", nullable = false)
     private Boolean isCompleted = false;
 
+    @Column(name = "description")
+    private String description;
+
     public Boolean getIsCompleted() {
         return isCompleted;
     }
 
-    public void setIsCompleted(Boolean isCompleted) {
+    public ScheduledVisit setIsCompleted(Boolean isCompleted) {
         this.isCompleted = isCompleted;
+        return this;
     }
 
     public Forklift getForklift() {
         return forklift;
     }
 
-    public void setForklift(Forklift forklift) {
+    public ScheduledVisit setForklift(Forklift forklift) {
         this.forklift = forklift;
-    }
-
-    public OffsetDateTime getScheduledTime() {
-        return scheduledTime;
-    }
-
-    public void setScheduledTime(OffsetDateTime scheduledTime) {
-        this.scheduledTime = scheduledTime;
+        return this;
     }
 
     public VisitType getType() {
         return type;
     }
 
-    public void setType(VisitType type) {
+    public ScheduledVisit setType(VisitType type) {
         this.type = type;
+        return this;
     }
 
     public User getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(User idUser) {
+    public ScheduledVisit setIdUser(User idUser) {
         this.idUser = idUser;
+        return this;
     }
 
     public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public ScheduledVisit setId(Integer id) {
         this.id = id;
+        return this;
+    }
+
+    public OffsetDateTime getInitialScheduledTime() {
+        return initialScheduledTime;
+    }
+
+    public ScheduledVisit setInitialScheduledTime(OffsetDateTime initialScheduledTime) {
+        this.initialScheduledTime = initialScheduledTime;
+        return this;
+    }
+
+    public OffsetDateTime getEndScheduledTime() {
+        return endScheduledTime;
+    }
+
+    public ScheduledVisit setEndScheduledTime(OffsetDateTime endScheduledTime) {
+        this.endScheduledTime = endScheduledTime;
+        return this;
+    }
+
+    public Boolean getCompleted() {
+        return isCompleted;
+    }
+
+    public ScheduledVisit setCompleted(Boolean completed) {
+        isCompleted = completed;
+        return this;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public ScheduledVisit setDescription(String description) {
+        this.description = description;
+        return this;
     }
 }
