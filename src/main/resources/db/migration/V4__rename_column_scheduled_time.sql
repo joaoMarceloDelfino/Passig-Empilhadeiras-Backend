@@ -1,0 +1,1 @@
+ALTER TABLE scheduled_visit RENAME COLUMN scheduled_time TO initial_scheduled_time
