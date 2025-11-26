@@ -12,7 +12,7 @@ public class Parametro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Max(20)
+    @Max(100)
     @NotNull
     private String nome;
 

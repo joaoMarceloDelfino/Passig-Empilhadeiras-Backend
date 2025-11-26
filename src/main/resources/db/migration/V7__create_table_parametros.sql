@@ -1,5 +1,5 @@
 CREATE TABLE Parametros(
 	id SERIAL PRIMARY KEY,
-	nome VARCHAR(20),
+	nome VARCHAR(100),
 	valor VARCHAR(50)
 )
