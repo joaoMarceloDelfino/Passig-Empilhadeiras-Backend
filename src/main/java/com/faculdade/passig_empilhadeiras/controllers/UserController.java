@@ -40,4 +40,12 @@ public class UserController {
         logger.info("End existsByEmail");
         return userExists;
     }
+
+    @GetMapping("/isUserLogged")
+    public Boolean isUserLogged(){
+        logger.info("Start isUserLogged");
+        Boolean userLogged = userService.isUserLogged();
+        logger.info("End isUserLogged");
+        return userLogged;
+    }
 }

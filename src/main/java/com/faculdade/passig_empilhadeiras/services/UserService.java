@@ -10,6 +10,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -85,5 +86,15 @@ public class UserService {
         String userLoggedEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepository.findByEmail(userLoggedEmail);
     }
+
+    public Boolean isUserLogged() {
+        Authentication authentication = SecurityContextHolder.getContext().
+                getAuthentication();
+
+        return authentication != null &&
+                authentication.isAuthenticated()
+                && !(authentication instanceof AnonymousAuthenticationToken);
+    }
+
 
 }
