@@ -43,7 +43,8 @@ import java.util.List;
                     .authorizeHttpRequests(auth -> auth
                             .requestMatchers("/api/user/login",
                                     "/api/user/register",
-                                    "/api/forklifts/findAll").permitAll()
+                                    "/api/forklifts/findAll",
+                                    "/api/user/existsByEmail").permitAll()
                             .anyRequest().authenticated()
                     )
                     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

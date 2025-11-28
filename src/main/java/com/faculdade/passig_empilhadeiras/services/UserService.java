@@ -96,5 +96,17 @@ public class UserService {
                 && !(authentication instanceof AnonymousAuthenticationToken);
     }
 
+    public Boolean logout(HttpServletResponse response){
+        Cookie cookie = new Cookie("accessToken", null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+
+        response.addCookie(cookie);
+
+        return true;
+    }
+
 
 }

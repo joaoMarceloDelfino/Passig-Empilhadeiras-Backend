@@ -48,4 +48,14 @@ public class UserController {
         logger.info("End isUserLogged");
         return userLogged;
     }
+
+    @PostMapping("/logout")
+    public Boolean logout(HttpServletResponse response) {
+        logger.info("Start logout");
+        Boolean logout = userService.logout(response);
+        logger.info("End logout");
+        return logout;
+    }
+
+
 }

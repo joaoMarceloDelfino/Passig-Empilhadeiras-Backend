@@ -43,6 +43,7 @@ public class User {
 
     @Email
     @NotNull
+    @Size(max = 255)
     @Column(name = "email")
     private String email;
 
