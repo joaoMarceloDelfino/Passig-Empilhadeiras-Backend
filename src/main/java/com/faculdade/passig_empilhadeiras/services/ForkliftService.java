@@ -2,6 +2,7 @@ package com.faculdade.passig_empilhadeiras.services;
 
 import com.faculdade.passig_empilhadeiras.dtos.ForkiliftDtoV1;
 import com.faculdade.passig_empilhadeiras.dtos.ForkliftImageDTOV1;
+import com.faculdade.passig_empilhadeiras.dtos.ForkliftRentDTOV1;
 import com.faculdade.passig_empilhadeiras.enums.ForkliftStatus;
 import com.faculdade.passig_empilhadeiras.mappers.ForkliftMapper;
 import com.faculdade.passig_empilhadeiras.models.Forklift;

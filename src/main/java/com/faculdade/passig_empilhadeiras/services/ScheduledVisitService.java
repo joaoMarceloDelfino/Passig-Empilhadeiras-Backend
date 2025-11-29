@@ -1,11 +1,15 @@
 package com.faculdade.passig_empilhadeiras.services;
 
+import com.faculdade.passig_empilhadeiras.dtos.ForkliftRentDTOV1;
 import com.faculdade.passig_empilhadeiras.dtos.ScheduledTimestampDTOV1;
 import com.faculdade.passig_empilhadeiras.enums.VisitType;
+import com.faculdade.passig_empilhadeiras.mappers.ForkliftMapper;
 import com.faculdade.passig_empilhadeiras.models.Parametro;
 import com.faculdade.passig_empilhadeiras.models.ScheduledVisit;
+import com.faculdade.passig_empilhadeiras.models.User;
 import com.faculdade.passig_empilhadeiras.models.VisitAttachment;
 import com.faculdade.passig_empilhadeiras.repositories.ScheduledVisitRepository;
+import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +35,8 @@ public class ScheduledVisitService {
     private VisitAttachmentService visitAttachmentService;
     @Autowired
     private ParametroService parametroService;
+    @Resource
+    private ForkliftMapper forkliftMapper;
 
     @Transactional
     public Boolean saveScheduledVisit(OffsetDateTime initialScheduledTime, OffsetDateTime endScheduledTime, String description, List<MultipartFile> visitAttachments){
@@ -93,5 +99,23 @@ public class ScheduledVisitService {
         }
 
         return scheduledTimestamps;
+    }
+
+    public Boolean saveForkliftRentVist(ForkliftRentDTOV1 forkliftRentDTOV1) {
+        User loggedUser = userService.getLoggedUser();
+        ScheduledVisit scheduledVisit = new ScheduledVisit();
+        scheduledVisit.setInitialScheduledTime(forkliftRentDTOV1.getInitialScheduledTime());
+        scheduledVisit.setEndScheduledTime(forkliftRentDTOV1.getEndScheduledTime());
+        scheduledVisit.setType(VisitType.AL);
+        scheduledVisit.setIdUser(loggedUser);
+        scheduledVisit.setForklift(forkliftMapper.convertToModel(forkliftRentDTOV1.getForkiliftDtoV1()));
+        scheduledVisit.setIsCompleted(false);
+        if(forkliftRentDTOV1.getDescription() != null){
+            scheduledVisit.setDescription(forkliftRentDTOV1.getDescription());
+        }
+
+        scheduledVisitRepository.saveAndFlush(scheduledVisit);
+
+        return true;
     }
 }

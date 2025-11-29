@@ -1,7 +1,9 @@
 package com.faculdade.passig_empilhadeiras.controllers;
 
+import com.faculdade.passig_empilhadeiras.dtos.ForkliftRentDTOV1;
 import com.faculdade.passig_empilhadeiras.dtos.ScheduledTimestampDTOV1;
 import com.faculdade.passig_empilhadeiras.services.ScheduledVisitService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +26,19 @@ public class ScheduledVisitController {
     public Boolean saveScheduledVisit(@RequestParam OffsetDateTime initialScheduledTime,
                       @RequestParam OffsetDateTime endScheduledTime,
                       @RequestParam String description,
-                      @RequestParam("file") List<MultipartFile> visitAttachments){
+                      @RequestParam(value = "file", required = false) List<MultipartFile> visitAttachments){
         logger.info("Start saveScheduledVisit");
         Boolean retorno = scheduledVisitService.saveScheduledVisit(initialScheduledTime, endScheduledTime, description, visitAttachments);
         logger.info("End saveScheduledVisit");
 
+        return retorno;
+    }
+
+    @PostMapping("/saveForkliftRentVisit")
+    public Boolean saveForkliftRentVisit(@Valid @RequestBody ForkliftRentDTOV1 forkliftRentDTOV1){
+        logger.info("Start saveForkliftRentVisit");
+        Boolean retorno = scheduledVisitService.saveForkliftRentVist(forkliftRentDTOV1);
+        logger.info("End saveForkliftRentVisit");
         return retorno;
     }
 
