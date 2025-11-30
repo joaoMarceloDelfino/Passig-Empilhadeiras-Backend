@@ -135,4 +135,8 @@ public class ForkliftService {
         return true;
     }
 
+    public Forklift findById(Integer id) {
+        return forkliftRepository.findById(id).orElse(null);
+    }
+
 }

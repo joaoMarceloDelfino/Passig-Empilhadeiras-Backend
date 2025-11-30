@@ -2,12 +2,10 @@ package com.faculdade.passig_empilhadeiras.services;
 
 import com.faculdade.passig_empilhadeiras.dtos.ForkliftRentDTOV1;
 import com.faculdade.passig_empilhadeiras.dtos.ScheduledTimestampDTOV1;
+import com.faculdade.passig_empilhadeiras.enums.ForkliftStatus;
 import com.faculdade.passig_empilhadeiras.enums.VisitType;
 import com.faculdade.passig_empilhadeiras.mappers.ForkliftMapper;
-import com.faculdade.passig_empilhadeiras.models.Parametro;
-import com.faculdade.passig_empilhadeiras.models.ScheduledVisit;
-import com.faculdade.passig_empilhadeiras.models.User;
-import com.faculdade.passig_empilhadeiras.models.VisitAttachment;
+import com.faculdade.passig_empilhadeiras.models.*;
 import com.faculdade.passig_empilhadeiras.repositories.ScheduledVisitRepository;
 import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
@@ -15,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,9 +32,20 @@ public class ScheduledVisitService {
     private ParametroService parametroService;
     @Resource
     private ForkliftMapper forkliftMapper;
+    @Autowired
+    private ForkliftService forkliftService;
 
     @Transactional
     public Boolean saveScheduledVisit(OffsetDateTime initialScheduledTime, OffsetDateTime endScheduledTime, String description, List<MultipartFile> visitAttachments){
+
+        if(endScheduledTime.isBefore(initialScheduledTime)){
+            throw new RuntimeException("Invalid initial scheduled time");
+        }
+
+        if(initialScheduledTime.isBefore(OffsetDateTime.now())){
+            throw new RuntimeException("initial scheduled time in the past");
+        }
+
         ScheduledVisit scheduledVisit = new ScheduledVisit();
         scheduledVisit.setInitialScheduledTime(initialScheduledTime)
                 .setEndScheduledTime(endScheduledTime)
@@ -80,11 +86,17 @@ public class ScheduledVisitService {
         while(!currentEndTime.isAfter(HORARIO_FIM_EXPEDIENTE)) {
             boolean isNotOcupado = true;
 
+            LocalDateTime currentInitialDateTime  = LocalDateTime.of(date, currentInitialTime);
+
             for(ScheduledVisit scheduledVisit : scheduledVisits){
-                if(currentInitialTime.isBefore(scheduledVisit.getEndScheduledTime().toLocalTime()) && currentEndTime.isAfter(scheduledVisit.getInitialScheduledTime().toLocalTime())) {
+                if((currentInitialTime.isBefore(scheduledVisit.getEndScheduledTime().toLocalTime()) && currentEndTime.isAfter(scheduledVisit.getInitialScheduledTime().toLocalTime()))) {
                     isNotOcupado = false;
                 }
 
+            }
+
+            if(currentInitialDateTime.isBefore(LocalDateTime.now()) && isNotOcupado){
+                isNotOcupado = false;
             }
 
             if(isNotOcupado){
@@ -102,6 +114,25 @@ public class ScheduledVisitService {
     }
 
     public Boolean saveForkliftRentVist(ForkliftRentDTOV1 forkliftRentDTOV1) {
+
+        if(forkliftRentDTOV1.getEndScheduledTime().isBefore(forkliftRentDTOV1.getInitialScheduledTime())){
+            throw new RuntimeException("Invalid initial scheduled time");
+        }
+
+        if(forkliftRentDTOV1.getInitialScheduledTime().isBefore(OffsetDateTime.now())){
+            throw new RuntimeException("initial scheduled time in the past");
+        }
+
+        Forklift forklift = forkliftService.findById(forkliftRentDTOV1.getForkiliftDtoV1().getId());
+
+        if(forklift == null){
+            throw new RuntimeException("Forklift not found");
+        }
+
+        if(!forklift.getStatus().equals(ForkliftStatus.FO)){
+            throw new RuntimeException("Forklift indisponible");
+        }
+
         User loggedUser = userService.getLoggedUser();
         ScheduledVisit scheduledVisit = new ScheduledVisit();
         scheduledVisit.setInitialScheduledTime(forkliftRentDTOV1.getInitialScheduledTime());
