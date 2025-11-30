@@ -27,6 +27,16 @@ public class JwtTokenService {
                 .compact();
     }
 
+    public String generateRefreshToken(String email) {
+        return Jwts.builder()
+                .subject(email)
+                .issuedAt(new Date())
+                .issuer(ISSUER)
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
+                .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
+                .compact();
+    }
+
     private Claims extractAllClaims(String token) {
         return Jwts.
                 parser()

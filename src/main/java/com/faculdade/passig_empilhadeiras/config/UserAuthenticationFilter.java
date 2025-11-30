@@ -29,7 +29,7 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
 
         String path = String.valueOf(request.getRequestURL());
 
-        if (path.contains("/api/user/login") || path.contains("/api/user/register") || path.contains("/api/forklifts/findAll") || path.contains("/api/user/existsByEmail")) {
+        if (path.contains("/api/user/login") || path.contains("/api/user/register") || path.contains("/api/forklifts/findAll") || path.contains("/api/user/existsByEmail") || path.contains("/api/user/refresh")) {
             filterChain.doFilter(request, response);
             return;
         }

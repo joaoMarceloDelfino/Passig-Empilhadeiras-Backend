@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -55,6 +56,17 @@ public class UserController {
         Boolean logout = userService.logout(response);
         logger.info("End logout");
         return logout;
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<String> refreshAccessToken(@CookieValue("refreshToken") String refreshToken, HttpServletResponse response) {
+        try{
+            String accessToken = userService.generateRefreshTokenByAccessToken(refreshToken, response);
+            return ResponseEntity.ok(accessToken);
+        }
+        catch(Exception ex){
+            return ResponseEntity.status(401).build();
+        }
     }
 
 

@@ -15,6 +15,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -30,14 +32,12 @@ public class UserService {
     JwtTokenService jwtTokenService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    UserDetailsService userDetailsService;
 
 
 
     public String login(LoginDTOV1 loginDTOV1, @CookieValue(value = "accessToken", required = false) String accessToken, HttpServletResponse response) {
-
-//        if(accessToken != null){
-//            throw new RuntimeException(USER_ALREADY_LOGED);
-//        }
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -52,6 +52,13 @@ public class UserService {
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         response.addCookie(cookie);
+
+        String refreshToken = jwtTokenService.generateRefreshToken(userDetails.getUsername());
+        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+        refreshTokenCookie.setMaxAge(604800);
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setPath("/");
+        response.addCookie(refreshTokenCookie);
 
         return token;
     }
@@ -103,10 +110,32 @@ public class UserService {
         cookie.setPath("/");
         cookie.setMaxAge(0);
 
+        Cookie refreshCookie = new Cookie("refreshToken", null);
+        refreshCookie.setHttpOnly(true);
+        refreshCookie.setSecure(true);
+        refreshCookie.setPath("/");
+        refreshCookie.setMaxAge(0);
+
         response.addCookie(cookie);
+        response.addCookie(refreshCookie);
 
         return true;
     }
 
+    public String generateRefreshTokenByAccessToken(String refreshToken, HttpServletResponse response) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(jwtTokenService.extractUsername(refreshToken));
+
+        if(!jwtTokenService.validateToken(refreshToken, userDetails)){
+            throw new RuntimeException("Refresh Token inválido");
+        }
+
+        String token = jwtTokenService.generateToken(userDetails.getUsername());
+        Cookie cookie = new Cookie("accessToken", token);
+        cookie.setMaxAge(3600);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        return token;
+    }
 
 }

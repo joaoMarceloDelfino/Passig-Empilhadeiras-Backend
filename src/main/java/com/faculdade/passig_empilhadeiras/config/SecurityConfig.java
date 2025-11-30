@@ -44,7 +44,8 @@ import java.util.List;
                             .requestMatchers("/api/user/login",
                                     "/api/user/register",
                                     "/api/forklifts/findAll",
-                                    "/api/user/existsByEmail").permitAll()
+                                    "/api/user/existsByEmail",
+                                    "/api/user/refresh").permitAll()
                             .anyRequest().authenticated()
                     )
                     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
