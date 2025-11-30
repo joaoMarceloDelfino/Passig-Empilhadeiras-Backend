@@ -4,6 +4,7 @@ import com.faculdade.passig_empilhadeiras.config.JwtTokenService;
 import com.faculdade.passig_empilhadeiras.config.UserDetailsImpl;
 import com.faculdade.passig_empilhadeiras.dtos.AuthDTOV1;
 import com.faculdade.passig_empilhadeiras.dtos.LoginDTOV1;
+import com.faculdade.passig_empilhadeiras.models.Role;
 import com.faculdade.passig_empilhadeiras.models.User;
 import com.faculdade.passig_empilhadeiras.repositories.UserRepository;
 import jakarta.servlet.http.Cookie;
@@ -34,6 +35,8 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     UserDetailsService userDetailsService;
+    @Autowired
+    RoleService roleService;
 
 
 
@@ -75,6 +78,8 @@ public class UserService {
         }
 
         User user = new User();
+        Role role = roleService.findByName("Client");
+        user.setRole(role);
         user.setUsername(authDTOV1.getUsername());
         user.setEmail(authDTOV1.getEmail());
         user.setCellphoneNumber(authDTOV1.getCellphoneNumber());

@@ -32,10 +32,10 @@ public class User {
     @Column(name = "password_hash", nullable = false, length = 72)
     private String passwordHash;
 
-//    @NotNull
-//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//    @JoinColumn(name = "id_role", nullable = false)
-//    private Role role;
+    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "id_role", nullable = false)
+    private Role role;
 
     @ColumnDefault("now()")
     @Column(name = "created_at")
@@ -55,13 +55,13 @@ public class User {
         this.createdAt = createdAt;
     }
 
-//    public Role getRole() {
-//        return role;
-//    }
-//
-//    public void setRole(Role role) {
-//        this.role = role;
-//    }
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     public String getPasswordHash() {
         return passwordHash;

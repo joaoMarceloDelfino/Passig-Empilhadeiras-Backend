@@ -46,6 +46,7 @@ import java.util.List;
                                     "/api/forklifts/findAll",
                                     "/api/user/existsByEmail",
                                     "/api/user/refresh").permitAll()
+                            .requestMatchers("/api/forklifts/save", "/api/forklifts/").hasRole("Admin")
                             .anyRequest().authenticated()
                     )
                     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
