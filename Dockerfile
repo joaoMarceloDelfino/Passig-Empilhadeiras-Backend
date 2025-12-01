@@ -1,11 +1,10 @@
-FROM ubuntu:latest as build
-RUN apt-get update
-RUN apt-get install openjdk-17-jdk -y
+FROM gradle:8.7-jdk17 AS build
+WORKDIR /app
 COPY . .
-RUN ./gradlew bootJar --no-daemon
+RUN gradle bootJar --no-daemon
 
 FROM openjdk:17-jdk-slim
+WORKDIR /app
 EXPOSE 8080
-COPY --FROM-build /build/libs/passig-empilhadeiras-1.jar app.jar
-
+COPY --from=build /app/build/libs/passig-empilhadeiras-1.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
