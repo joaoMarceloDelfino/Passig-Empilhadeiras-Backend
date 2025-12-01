@@ -1,1 +1,0 @@
-drop table forklift_rent_history

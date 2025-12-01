@@ -1,1 +1,0 @@
-ALTER TABLE scheduled_visit ADD COLUMN end_scheduled_time TIMESTAMP WITH TIME ZONE NOT NULL

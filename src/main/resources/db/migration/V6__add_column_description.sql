@@ -1,1 +1,0 @@
-ALTER TABLE scheduled_visit ADD COLUMN description VARCHAR(150);

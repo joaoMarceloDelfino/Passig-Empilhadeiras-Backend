@@ -1,5 +1,0 @@
-CREATE TABLE Parametros(
-	id SERIAL PRIMARY KEY,
-	nome VARCHAR(100),
-	valor VARCHAR(50)
-)
