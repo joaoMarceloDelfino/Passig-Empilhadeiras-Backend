@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.faculdade</groupId>
 	<artifactId>passig-empilhadeiras</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1</version>
 	<name>passig-empilhadeiras</name>
 	<description>Backend do projeto de extensão de Programação Web.</description>
 	<url/>
