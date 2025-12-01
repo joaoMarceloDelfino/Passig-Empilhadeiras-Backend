@@ -12,6 +12,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -51,20 +53,28 @@ public class UserService {
         );
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         String token = jwtTokenService.generateToken(userDetails.getUsername());
-        Cookie cookie = new Cookie("accessToken", token);
-        cookie.setMaxAge(3600);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        response.addCookie(cookie);
+        ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", token)
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .path("/")
+                .maxAge(3600)
+                .build();
 
         String refreshToken = jwtTokenService.generateRefreshToken(userDetails.getUsername());
-        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
-        refreshTokenCookie.setMaxAge(604800);
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setPath("/");
-        response.addCookie(refreshTokenCookie);
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken)
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .path("/")
+                .maxAge(604800)
+                .build();
+
+        response.addHeader(HttpHeaders.SET_COOKIE, accessTokenCookie.toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
 
         return token;
+
     }
 
     @Transactional
@@ -109,24 +119,29 @@ public class UserService {
                 && !(authentication instanceof AnonymousAuthenticationToken);
     }
 
-    public Boolean logout(HttpServletResponse response){
-        Cookie cookie = new Cookie("accessToken", null);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(0);
+    public Boolean logout(HttpServletResponse response) {
+        ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", "")
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .path("/")
+                .maxAge(0)
+                .build();
 
-        Cookie refreshCookie = new Cookie("refreshToken", null);
-        refreshCookie.setHttpOnly(true);
-        refreshCookie.setSecure(true);
-        refreshCookie.setPath("/");
-        refreshCookie.setMaxAge(0);
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", "")
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .path("/")
+                .maxAge(0)
+                .build();
 
-        response.addCookie(cookie);
-        response.addCookie(refreshCookie);
+        response.addHeader(HttpHeaders.SET_COOKIE, accessTokenCookie.toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
 
         return true;
     }
+
 
     public String generateRefreshTokenByAccessToken(String refreshToken, HttpServletResponse response) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(jwtTokenService.extractUsername(refreshToken));
