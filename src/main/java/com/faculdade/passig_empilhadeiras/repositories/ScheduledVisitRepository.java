@@ -1,6 +1,8 @@
 package com.faculdade.passig_empilhadeiras.repositories;
 
+import com.faculdade.passig_empilhadeiras.enums.VisitType;
 import com.faculdade.passig_empilhadeiras.models.ScheduledVisit;
+import com.faculdade.passig_empilhadeiras.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,4 +19,5 @@ public interface ScheduledVisitRepository extends JpaRepository<ScheduledVisit, 
             "WHERE sv.initial_scheduled_time::date = :date", nativeQuery = true)
     List<ScheduledVisit> findByDate(@Param("date") LocalDate date);
 
+    List<ScheduledVisit> findAllByIdUserAndType(User user, VisitType type);
 }

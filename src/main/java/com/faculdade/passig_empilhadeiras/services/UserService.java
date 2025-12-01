@@ -4,6 +4,7 @@ import com.faculdade.passig_empilhadeiras.config.JwtTokenService;
 import com.faculdade.passig_empilhadeiras.config.UserDetailsImpl;
 import com.faculdade.passig_empilhadeiras.dtos.AuthDTOV1;
 import com.faculdade.passig_empilhadeiras.dtos.LoginDTOV1;
+import com.faculdade.passig_empilhadeiras.dtos.UserDTOV1;
 import com.faculdade.passig_empilhadeiras.models.Role;
 import com.faculdade.passig_empilhadeiras.models.User;
 import com.faculdade.passig_empilhadeiras.repositories.UserRepository;

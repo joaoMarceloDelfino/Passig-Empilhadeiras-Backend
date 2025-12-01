@@ -2,6 +2,8 @@ package com.faculdade.passig_empilhadeiras.controllers;
 
 import com.faculdade.passig_empilhadeiras.dtos.ForkliftRentDTOV1;
 import com.faculdade.passig_empilhadeiras.dtos.ScheduledTimestampDTOV1;
+import com.faculdade.passig_empilhadeiras.dtos.ScheduledVisitDTOV1;
+import com.faculdade.passig_empilhadeiras.enums.VisitType;
 import com.faculdade.passig_empilhadeiras.services.ScheduledVisitService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -48,5 +50,13 @@ public class ScheduledVisitController {
         List<ScheduledTimestampDTOV1> scheduledTimestamps = scheduledVisitService.findDisponibleScheduledTimestamps(date);
         logger.info("End findDisponibleScheduledTimestamps");
         return scheduledTimestamps;
+    }
+
+    @GetMapping("/findScheduledVisitByType")
+    public List<ScheduledVisitDTOV1> findScheduledVisitByType(VisitType type){
+        logger.info("Start findScheduledVisitByType");
+        List<ScheduledVisitDTOV1> scheduledVisitDTOV1 = scheduledVisitService.findAllByType(type);
+        logger.info("End findScheduledVisitByType");
+        return scheduledVisitDTOV1;
     }
 }

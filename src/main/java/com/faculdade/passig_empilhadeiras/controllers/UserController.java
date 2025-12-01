@@ -2,7 +2,10 @@ package com.faculdade.passig_empilhadeiras.controllers;
 
 import com.faculdade.passig_empilhadeiras.dtos.AuthDTOV1;
 import com.faculdade.passig_empilhadeiras.dtos.LoginDTOV1;
+import com.faculdade.passig_empilhadeiras.dtos.UserDTOV1;
+import com.faculdade.passig_empilhadeiras.mappers.UserMapper;
 import com.faculdade.passig_empilhadeiras.services.UserService;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/user")
 public class UserController {
     Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    @Resource
+    UserMapper  userMapper;
 
     @Autowired
     UserService userService;
@@ -67,6 +73,14 @@ public class UserController {
         catch(Exception ex){
             return ResponseEntity.status(401).build();
         }
+    }
+
+    @GetMapping("/getLoggedUser")
+    public UserDTOV1 getLoggedUser(){
+        logger.info("Start getLoggedUser");
+        UserDTOV1 user = userMapper.convertToDTO(userService.getLoggedUser());
+        logger.info("End getLoggedUser");
+        return user;
     }
 
 

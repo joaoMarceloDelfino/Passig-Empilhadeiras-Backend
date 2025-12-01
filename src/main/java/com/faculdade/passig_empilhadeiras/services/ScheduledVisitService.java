@@ -2,9 +2,11 @@ package com.faculdade.passig_empilhadeiras.services;
 
 import com.faculdade.passig_empilhadeiras.dtos.ForkliftRentDTOV1;
 import com.faculdade.passig_empilhadeiras.dtos.ScheduledTimestampDTOV1;
+import com.faculdade.passig_empilhadeiras.dtos.ScheduledVisitDTOV1;
 import com.faculdade.passig_empilhadeiras.enums.ForkliftStatus;
 import com.faculdade.passig_empilhadeiras.enums.VisitType;
 import com.faculdade.passig_empilhadeiras.mappers.ForkliftMapper;
+import com.faculdade.passig_empilhadeiras.mappers.ScheduledVisitMapper;
 import com.faculdade.passig_empilhadeiras.models.*;
 import com.faculdade.passig_empilhadeiras.repositories.ScheduledVisitRepository;
 import jakarta.annotation.Resource;
@@ -34,6 +36,8 @@ public class ScheduledVisitService {
     private ForkliftMapper forkliftMapper;
     @Autowired
     private ForkliftService forkliftService;
+    @Resource
+    private ScheduledVisitMapper  scheduledVisitMapper;
 
     @Transactional
     public Boolean saveScheduledVisit(OffsetDateTime initialScheduledTime, OffsetDateTime endScheduledTime, String description, List<MultipartFile> visitAttachments){
@@ -148,5 +152,12 @@ public class ScheduledVisitService {
         scheduledVisitRepository.saveAndFlush(scheduledVisit);
 
         return true;
+    }
+
+    public List<ScheduledVisitDTOV1> findAllByType(VisitType visitType){
+        User user = userService.getLoggedUser();
+        return scheduledVisitRepository.findAllByIdUserAndType(user, visitType)
+                .stream()
+                .map(x -> scheduledVisitMapper.convertoToDto(x)).toList();
     }
 }
