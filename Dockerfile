@@ -3,7 +3,7 @@ WORKDIR /app
 COPY . .
 RUN gradle bootJar --no-daemon
 
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jdk
 WORKDIR /app
 EXPOSE 8080
 COPY --from=build /app/build/libs/passig-empilhadeiras-1.jar app.jar
