@@ -3,6 +3,7 @@ package com.faculdade.passig_empilhadeiras.controllers;
 import com.faculdade.passig_empilhadeiras.dtos.ForkliftRentDTOV1;
 import com.faculdade.passig_empilhadeiras.dtos.ScheduledTimestampDTOV1;
 import com.faculdade.passig_empilhadeiras.dtos.ScheduledVisitDTOV1;
+import com.faculdade.passig_empilhadeiras.dtos.ScheduledVisitDTOV2;
 import com.faculdade.passig_empilhadeiras.enums.VisitType;
 import com.faculdade.passig_empilhadeiras.services.ScheduledVisitService;
 import jakarta.validation.Valid;
@@ -58,5 +59,13 @@ public class ScheduledVisitController {
         List<ScheduledVisitDTOV1> scheduledVisitDTOV1 = scheduledVisitService.findAllByType(type);
         logger.info("End findScheduledVisitByType");
         return scheduledVisitDTOV1;
+    }
+
+    @GetMapping("/findAllScheduledVisit")
+    public List<ScheduledVisitDTOV2> findAllScheduledVisit(){
+        logger.info("Start findAllScheduledVisit");
+        List<ScheduledVisitDTOV2> scheduledVisitList = scheduledVisitService.findALl();
+        logger.info("End findAllScheduledVisit");
+        return scheduledVisitList;
     }
 }
