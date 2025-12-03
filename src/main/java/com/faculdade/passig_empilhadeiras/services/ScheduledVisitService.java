@@ -3,6 +3,7 @@ package com.faculdade.passig_empilhadeiras.services;
 import com.faculdade.passig_empilhadeiras.dtos.ForkliftRentDTOV1;
 import com.faculdade.passig_empilhadeiras.dtos.ScheduledTimestampDTOV1;
 import com.faculdade.passig_empilhadeiras.dtos.ScheduledVisitDTOV1;
+import com.faculdade.passig_empilhadeiras.dtos.ScheduledVisitDTOV2;
 import com.faculdade.passig_empilhadeiras.enums.ForkliftStatus;
 import com.faculdade.passig_empilhadeiras.enums.VisitType;
 import com.faculdade.passig_empilhadeiras.mappers.ForkliftMapper;
@@ -159,5 +160,11 @@ public class ScheduledVisitService {
         return scheduledVisitRepository.findAllByIdUserAndType(user, visitType)
                 .stream()
                 .map(x -> scheduledVisitMapper.convertoToDto(x)).toList();
+    }
+
+    public List<ScheduledVisitDTOV2> findALl(){
+        return scheduledVisitRepository.findAll()
+                .stream()
+                .map(x -> scheduledVisitMapper.convertoToDtoV2(x)).toList();
     }
 }

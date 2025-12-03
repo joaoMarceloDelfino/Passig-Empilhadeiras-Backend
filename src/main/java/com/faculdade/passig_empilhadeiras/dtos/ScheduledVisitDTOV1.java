@@ -22,6 +22,7 @@ public class ScheduledVisitDTOV1 {
 
     private String description;
 
+
     public Integer getId() {
         return id;
     }

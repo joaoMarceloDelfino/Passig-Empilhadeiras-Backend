@@ -5,6 +5,7 @@ import com.faculdade.passig_empilhadeiras.config.UserDetailsImpl;
 import com.faculdade.passig_empilhadeiras.dtos.AuthDTOV1;
 import com.faculdade.passig_empilhadeiras.dtos.LoginDTOV1;
 import com.faculdade.passig_empilhadeiras.dtos.UserDTOV1;
+import com.faculdade.passig_empilhadeiras.mappers.UserMapper;
 import com.faculdade.passig_empilhadeiras.models.Role;
 import com.faculdade.passig_empilhadeiras.models.User;
 import com.faculdade.passig_empilhadeiras.repositories.UserRepository;
@@ -25,6 +26,8 @@ import org.springframework.web.bind.annotation.CookieValue;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -38,7 +41,8 @@ public class UserService {
     UserDetailsService userDetailsService;
     @Autowired
     RoleService roleService;
-
+    @Autowired
+    private UserMapper userMapper;
 
 
     public String login(LoginDTOV1 loginDTOV1, @CookieValue(value = "accessToken", required = false) String accessToken, HttpServletResponse response) {
@@ -142,6 +146,12 @@ public class UserService {
         cookie.setPath("/");
         response.addCookie(cookie);
         return token;
+    }
+
+    public List<UserDTOV1> findAllUsers(){
+        return userRepository.findAll()
+                .stream()
+                .map(user -> userMapper.convertToDTO(user)).collect(Collectors.toList());
     }
 
 }
