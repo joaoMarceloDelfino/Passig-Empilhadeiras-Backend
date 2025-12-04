@@ -3,6 +3,7 @@ package com.faculdade.passig_empilhadeiras.dtos;
 import com.faculdade.passig_empilhadeiras.enums.VisitType;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 public class ScheduledVisitDTOV2 {
 
@@ -21,6 +22,8 @@ public class ScheduledVisitDTOV2 {
         private String description;
 
         private UserDTOV1 user;
+
+        private List<VisitAttachmentDTOV1> base64Images;
 
 
         public Integer getId() {
@@ -85,5 +88,13 @@ public class ScheduledVisitDTOV2 {
 
         public void setUser(UserDTOV1 user) {
             this.user = user;
+        }
+
+        public List<VisitAttachmentDTOV1> getBase64Images() {
+            return base64Images;
+        }
+
+        public void setBase64Images(List<VisitAttachmentDTOV1> base64Images) {
+            this.base64Images = base64Images;
         }
 }
