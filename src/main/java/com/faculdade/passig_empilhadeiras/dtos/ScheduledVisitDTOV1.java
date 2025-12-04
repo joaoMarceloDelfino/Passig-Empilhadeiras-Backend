@@ -5,6 +5,7 @@ import com.faculdade.passig_empilhadeiras.models.Forklift;
 
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 public class ScheduledVisitDTOV1 {
 
@@ -21,6 +22,8 @@ public class ScheduledVisitDTOV1 {
     private Boolean isCompleted;
 
     private String description;
+
+    private List<VisitAttachmentDTOV1> base64Images;
 
 
     public Integer getId() {
@@ -77,5 +80,13 @@ public class ScheduledVisitDTOV1 {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<VisitAttachmentDTOV1> getBase64Images() {
+        return base64Images;
+    }
+
+    public void setBase64Images(List<VisitAttachmentDTOV1> base64Images) {
+        this.base64Images = base64Images;
     }
 }

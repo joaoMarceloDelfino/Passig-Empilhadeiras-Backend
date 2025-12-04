@@ -4,6 +4,7 @@ import com.faculdade.passig_empilhadeiras.config.JwtTokenService;
 import com.faculdade.passig_empilhadeiras.config.UserDetailsImpl;
 import com.faculdade.passig_empilhadeiras.dtos.AuthDTOV1;
 import com.faculdade.passig_empilhadeiras.dtos.LoginDTOV1;
+import com.faculdade.passig_empilhadeiras.dtos.LoginResponseDTOV1;
 import com.faculdade.passig_empilhadeiras.dtos.UserDTOV1;
 import com.faculdade.passig_empilhadeiras.mappers.UserMapper;
 import com.faculdade.passig_empilhadeiras.models.Role;
@@ -13,8 +14,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -47,7 +46,7 @@ public class UserService {
     private UserMapper userMapper;
 
 
-    public String login(LoginDTOV1 loginDTOV1, @CookieValue(value = "accessToken", required = false) String accessToken, HttpServletResponse response) {
+    public LoginResponseDTOV1 login(LoginDTOV1 loginDTOV1) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -57,28 +56,14 @@ public class UserService {
         );
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         String token = jwtTokenService.generateToken(userDetails.getUsername());
-        ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", token)
-                .httpOnly(true)
-                .secure(true)
-                .sameSite("None")
-                .path("/")
-                .maxAge(3600)
-                .build();
 
         String refreshToken = jwtTokenService.generateRefreshToken(userDetails.getUsername());
-        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken)
-                .httpOnly(true)
-                .secure(true)
-                .sameSite("None")
-                .path("/")
-                .maxAge(604800)
-                .build();
 
-        response.addHeader(HttpHeaders.SET_COOKIE, accessTokenCookie.toString());
-        response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
+        LoginResponseDTOV1 loginResponseDTOV1 = new LoginResponseDTOV1();
+        loginResponseDTOV1.setAccessToken(token);
+        loginResponseDTOV1.setRefreshToken(refreshToken);
 
-        return token;
-
+        return loginResponseDTOV1;
     }
 
     @Transactional
@@ -123,44 +108,14 @@ public class UserService {
                 && !(authentication instanceof AnonymousAuthenticationToken);
     }
 
-    public Boolean logout(HttpServletResponse response) {
-        ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", "")
-                .httpOnly(true)
-                .secure(true)
-                .sameSite("None")
-                .path("/")
-                .maxAge(0)
-                .build();
-
-        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", "")
-                .httpOnly(true)
-                .secure(true)
-                .sameSite("None")
-                .path("/")
-                .maxAge(0)
-                .build();
-
-        response.addHeader(HttpHeaders.SET_COOKIE, accessTokenCookie.toString());
-        response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
-
-        return true;
-    }
-
-
-    public String generateRefreshTokenByAccessToken(String refreshToken, HttpServletResponse response) {
+    public String generateRefreshTokenByAccessToken(String refreshToken) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(jwtTokenService.extractUsername(refreshToken));
 
         if(!jwtTokenService.validateToken(refreshToken, userDetails)){
             throw new RuntimeException("Refresh Token inválido");
         }
 
-        String token = jwtTokenService.generateToken(userDetails.getUsername());
-        Cookie cookie = new Cookie("accessToken", token);
-        cookie.setMaxAge(3600);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        response.addCookie(cookie);
-        return token;
+        return jwtTokenService.generateToken(userDetails.getUsername());
     }
 
     public List<UserDTOV1> findAllUsers(){

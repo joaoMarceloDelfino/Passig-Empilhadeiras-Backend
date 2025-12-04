@@ -2,6 +2,7 @@ package com.faculdade.passig_empilhadeiras.controllers;
 
 import com.faculdade.passig_empilhadeiras.dtos.AuthDTOV1;
 import com.faculdade.passig_empilhadeiras.dtos.LoginDTOV1;
+import com.faculdade.passig_empilhadeiras.dtos.LoginResponseDTOV1;
 import com.faculdade.passig_empilhadeiras.dtos.UserDTOV1;
 import com.faculdade.passig_empilhadeiras.mappers.UserMapper;
 import com.faculdade.passig_empilhadeiras.services.UserService;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -27,11 +29,11 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginDTOV1 loginDTOV1, String token, HttpServletResponse response){
+    public LoginResponseDTOV1 login(@RequestBody LoginDTOV1 loginDTOV1){
         logger.info("Start login");
-        String accessToken = userService.login(loginDTOV1, token, response);
+        LoginResponseDTOV1 tokens = userService.login(loginDTOV1);
         logger.info("End login");
-        return accessToken;
+        return tokens;
     }
 
     @PostMapping("/register")
@@ -58,18 +60,10 @@ public class UserController {
         return userLogged;
     }
 
-    @PostMapping("/logout")
-    public Boolean logout(HttpServletResponse response) {
-        logger.info("Start logout");
-        Boolean logout = userService.logout(response);
-        logger.info("End logout");
-        return logout;
-    }
-
     @PostMapping("/refresh")
-    public ResponseEntity<String> refreshAccessToken(@CookieValue("refreshToken") String refreshToken, HttpServletResponse response) {
+    public ResponseEntity<String> refreshAccessToken(@RequestBody Map<String, String> body) {
         try{
-            String accessToken = userService.generateRefreshTokenByAccessToken(refreshToken, response);
+            String accessToken = userService.generateRefreshTokenByAccessToken(body.get("refreshToken"));
             return ResponseEntity.ok(accessToken);
         }
         catch(Exception ex){
